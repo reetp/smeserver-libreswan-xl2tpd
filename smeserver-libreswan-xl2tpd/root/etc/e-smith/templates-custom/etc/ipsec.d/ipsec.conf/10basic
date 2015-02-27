@@ -8,7 +8,7 @@ conn L2TP-PSK
     forceencaps=yes
 # Right = Remote
     right=%any
-    rightprotopor = 17/%any
+    rightprotoport = 17/%any
 #   rightsubnet=vhost:%any,%priv  - Not currently used on working version
 
 
