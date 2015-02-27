@@ -6,7 +6,7 @@
 
     my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
 
-    $ipsecprop = "xl2tpd";
+    $ipsecprop = "L2TP-PSK";
 
     $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
     $OUT .= "    # to detect vanishing clients\n";
