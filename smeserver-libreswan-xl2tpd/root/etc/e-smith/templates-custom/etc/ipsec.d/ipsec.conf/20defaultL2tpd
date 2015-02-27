@@ -1,0 +1,22 @@
+
+{
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
+
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
+
+    $ipsecprop = "xl2tpd";
+
+    $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
+    $OUT .= "    # to detect vanishing clients\n";
+
+    my $dpddelay = $ipsecDB->get_prop("$ipsecprop",'dpddelay')||'10';
+    $OUT .= "    dpddelay=$dpddelay\n";
+
+    my $dpdtimeout = $ipsecDB->get_prop("$ipsecprop",'dpdtimeout')||'90';
+    $OUT .= "    dpdtimeout=$dpdtimeout\n";
+
+    my $dpdaction=$ipsecDB->get_prop("$ipsecprop",'dpdaction')||'clear';
+    $OUT .= "    dpdaction=$dpdaction\n";
+}

@@ -1,0 +1,3 @@
+There can only be one L2TPD connection
+
+db ipsec_connections set L2TPD-PSK ipsec status disabled IPRangeStart 192.168.x.50 IPRangeFinish 192,168.x.100  dpdaction clear dpddelay 10 dpdtimeout 90
