@@ -1,4 +1,4 @@
-%define name smeserver-libreswan
+%define name smeserver-libreswan-xl2tpd
 %define version 0.1
 %define release 1
 Summary: Plugin to enable LT2P/IPSEC connections
@@ -50,3 +50,10 @@ rm -rf %{name}-%{version}
 %pre
 %preun
 %post
+/sbin/e-smith/expand-template /etc/rc.d/init.d/masq
+/sbin/e-smith/expand-template /etc/sysctl.conf
+
+%postun
+/sbin/e-smith/expand-template /etc/rc.d/init.d/masq
+/sbin/e-smith/expand-template /etc/inittab
+/sbin/init q
