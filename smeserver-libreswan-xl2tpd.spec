@@ -56,6 +56,8 @@ rm -rf %{name}-%{version}
 %preun
 %post
 /sbin/e-smith/expand-template /etc/rc.d/init.d/masq
+/sbin/e-smith/expand-template /etc/inittab
+/sbin/init q
 
 %postun
 /sbin/e-smith/expand-template /etc/rc.d/init.d/masq
