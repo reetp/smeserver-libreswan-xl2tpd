@@ -1,0 +1,12 @@
+# Allow 1701
+#/sbin/iptables -A INPUT -p udp --dport 1701 -m policy --dir in --pol ipsec -j ACCEPT
+#/sbin/iptables -A INPUT -p udp --dport 1701 -j DROP
+
+#Forwarding rules for VPN
+# /sbin/iptables -A FORWARD -i ppp+ -p all -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+# /sbin/iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+#Ports for Openswan / xl2tpd
+/sbin/iptables -A INPUT -m policy --dir in --pol ipsec -p udp --dport 1701 -j ACCEPT
+/sbin/iptables -A INPUT -p udp --dport 500 -j ACCEPT
+/sbin/iptables -A INPUT -p udp --dport 4500 -j ACCEPT
