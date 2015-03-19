@@ -1,3 +1,6 @@
 There can only be one L2TPD connection
 
-db ipsec_connections set L2TPD-PSK ipsec status disabled IPRangeStart 192.168.x.50 IPRangeFinish 192.168.x.100  dpdaction clear dpddelay 10 dpdtimeout 90
+Subsitute x with your local lan address - make sure it isn't in the DHCP range
+Make sure you have a local user for pam auth
+
+db ipsec_connections set L2TPD-PSK status disabled IPRangeStart 192.168.x.50 IPRangeFinish 192.168.x.100  dpdaction clear dpddelay 10 dpdtimeout 90
