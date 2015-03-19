@@ -19,7 +19,7 @@
     $OUT .= "    rightprotoport=17/%any\n";
     $OUT .= "    # Using the magic port of \"0\" means \"any one single port\". This is\n";
     $OUT .= "    # a work around required for Apple OSX clients that use a randomly\n";
-    $OUT .= "    # high port, but propose \"0\" instead of their port.\n";8
+    $OUT .= "    # high port, but propose \"0\" instead of their port.\n";
     $OUT .= "    left=%defaultroute\n";
     $OUT .= "    leftprotoport=17/1701\n";
 
