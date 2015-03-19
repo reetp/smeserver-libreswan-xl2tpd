@@ -11,7 +11,7 @@
     $OUT .= "    authby=secret\n";
     $OUT .= "    pfs=no\n";
     $OUT .= "    auto=add\n";
-    $OUT .= "    keringtries=3\n";
+    $OUT .= "    keyingtries=3\n";
     $OUT .= "    rekey=no\n";
     $OUT .= "    type=transport\n";
     $OUT .= "    forceencaps=yes\n";
