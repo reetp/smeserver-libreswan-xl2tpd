@@ -1,4 +1,3 @@
-#x2ltpd
 
 [global]
 ipsec saref = yes

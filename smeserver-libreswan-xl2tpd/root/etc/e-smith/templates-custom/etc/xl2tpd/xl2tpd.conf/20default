@@ -8,21 +8,21 @@
 
     my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
 
-    my $InternalIP = $configDB->get_prop("InternalInterface", IPAddress);
+    my $InternalIP = $configDB->get_prop("InternalInterface", 'IPAddress');
 
-    my $ipRangeStart = $ipsecDB->get_prop("L2TP-PSK", "IPRangeStart");
-    my $ipRangeFinish = $ipsecDB->get_prop("L2TP-PSK", "IPRangeFinish");
+    my $ipRangeStart = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeStart');
+    my $ipRangeFinish = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeFinish');
 
-    $Out .= "[lns default]\n";
+    $OUT .= "[lns default]\n";
     $OUT .= "name=L2TP-VPN\n";
 
     $OUT .= "ip range = $ipRangeStart - $ipRangeFinish\n";
 
     $OUT .= "local ip = $InternalIP\n";
-    $OUT .= "unix authentication = yes";
-    $OUT .= "require authentication = yes";
-    $OUT .= "ppp debug = yes"
-    $OUT .= "pppoptfile = /etc/ppp/options.xl2tpd";
-    $OUT .= "length bit = yes";
+    $OUT .= "unix authentication = yes\n";
+    $OUT .= "require authentication = yes\n";
+    $OUT .= "ppp debug = yes\n";
+    $OUT .= "pppoptfile = /etc/ppp/options.xl2tpd\n";
+    $OUT .= "length bit = yes\n";
 
 }
