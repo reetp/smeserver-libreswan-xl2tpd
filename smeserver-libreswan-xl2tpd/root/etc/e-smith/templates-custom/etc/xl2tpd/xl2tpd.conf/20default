@@ -18,7 +18,7 @@
 
     $OUT .= "ip range = $ipRangeStart - $ipRangeFinish\n";
 
-    $OUT .= "local ip = $InternalIP\n;
+    $OUT .= "local ip = $InternalIP\n";
     $OUT .= "unix authentication = yes";
     $OUT .= "require authentication = yes";
     $OUT .= "ppp debug = yes"
