@@ -16,7 +16,7 @@
     $OUT .= "[lns default]\n";
     $OUT .= "name=L2TP-VPN\n";
 
-    $OUT .= "ip range = $ipRangeStart - $ipRangeFinish\n";
+    $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
 
     $OUT .= "local ip = $InternalIP\n";
     $OUT .= "unix authentication = yes\n";
