@@ -2,28 +2,57 @@
 
 # Need some thought on when the templates should be expanded and when the action should be called.
 
+# Need to 
+
+# On ipsec-update expand xl2tpd.conf & secrets
+
+
+# On ip-up.xl2tpd expand and restart masq
+
 use esmith::Build::CreateLinks qw(:all);
-my $event = "ip-up.xl2tpd";
+
+#--------------------------------------------------
+# actions for ipsec-update event
+#--------------------------------------------------
+
+my $eventIpsec = "ipsec-update";
 
 foreach (qw(
-       /etc/ipsec.conf
        /etc/ipsec.d/xl2tpd.conf
        /etc/ipsec.d/xl2tpd.secrets
     ))
 {
-    templates2events("$_", qw(
+    templates2events("$eventIpsec", qw(
     post-upgrade
     console-save
     bootstrap-console-save
     remoteaccess-update
     ipsec-update
-    ip-up.xl2tpd
     ));
 }
 
+
 #--------------------------------------------------
-# actions for ipsec-update event
+# actions for ip-up.xl2tpd event
 #--------------------------------------------------
+
+my $eventXl2tpd = "ip-up.xl2tpd";
+
+# templates2expand 
+
+foreach (qw(
+       /etc/rc.d/init.d/masq     
+    ))
+{
+    templates2events("$eventXl2tpd", qw(
+
+    ip-local.xl2td
+    ));
+}
+
+safe_symlink("adjust", "root/etc/e-smith/events/$event/services2adjust/masq");
+
+
 
 # Runlevel init links.
 service_link_enhanced("xl2tpd", "S95", "7");
@@ -31,5 +60,3 @@ service_link_enhanced("xl2tpd", "K21", "6");
 service_link_enhanced("xl2tpd", "K21", "0");
 service_link_enhanced("xl2tpd", "K21", "1");
 
-
-safe_symlink("adjust", "root/etc/e-smith/events/$event/services2adjust/masq");
