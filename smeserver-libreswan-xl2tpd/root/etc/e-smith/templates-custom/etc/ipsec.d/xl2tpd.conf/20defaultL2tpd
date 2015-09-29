@@ -5,8 +5,17 @@
     use esmith::ConfigDB;
 
     my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
+	  my $ipsecprop = "L2TPD-PSK";
+    
+  	my $ipsectype = $ipsecDB->get_prop( "$ipsecprop", 'type' );
 
-    my $ipsecprop = "L2TPD-PSK";
+		# first we verify if L2TPD is enabled for the connection
+
+		my $ipsecstatus = $ipsecDB->get_prop( "$ipsecprop", 'status' ) || "disabled";
+
+		return "# $ipsecprop is disabled\n" unless $ipsecstatus eq "enabled";
+    
+    
     $OUT .="conn $ipsecprop\n";
     $OUT .= "    authby=secret\n";
     $OUT .= "    pfs=no\n";
