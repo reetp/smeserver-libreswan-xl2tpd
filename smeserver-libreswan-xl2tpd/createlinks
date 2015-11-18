@@ -45,12 +45,13 @@ foreach (qw(
     ))
 {
     templates2events("$eventXl2tpd", qw(
-
+$eventXl2tpd
     ip-local.xl2td
     ));
 }
 
-safe_symlink("adjust", "root/etc/e-smith/events/$event/services2adjust/masq");
+# What was I thinking here ? Should be $eventIpsec or my $eventXl2tpd
+safe_symlink("adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq");
 
 
 
