@@ -20,11 +20,13 @@ AutoReqProv: no
 
 %description
 xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP allows you to tunnel PPP over UDP
+
 %changelog
 * Wed Nov 18 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-9
 - Add UDP DB variable and modify masq temnplate
 
-* Mon 29 Jun 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-8
+* Mon Jun 29
+2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-8
 - Remove Incorrect template file from /etc/ip-up.local
 
 * Wed Apr 08 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-6
