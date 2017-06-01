@@ -45,15 +45,14 @@ foreach (qw(
     ))
 {
     templates2events("$eventXl2tpd", qw(
-$eventXl2tpd
-    ip-local.xl2td
+    ip-up.xl2tpd
     ));
 }
 
 # What was I thinking here ? Should be $eventIpsec or my $eventXl2tpd
 safe_symlink("adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq");
 
-
+event_link("xl2tpd-interface-access", $event, "70");
 
 # Runlevel init links.
 service_link_enhanced("xl2tpd", "S95", "7");

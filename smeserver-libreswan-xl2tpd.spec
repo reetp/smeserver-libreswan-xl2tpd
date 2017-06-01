@@ -13,8 +13,8 @@ BuildRoot: /var/tmp/%{name}-%{version}
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools
 Requires:  e-smith-release >= 8.0
-Requires:  libreswan >= 3.12
-Requires:  smeserver-libreswan >= 0.4
+Requires:  libreswan >= 3.16
+Requires:  smeserver-libreswan >= 0.5
 Requires:  xl2tpd >= 1.3.6
 AutoReqProv: no
 
@@ -22,11 +22,16 @@ AutoReqProv: no
 xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP allows you to tunnel PPP over UDP
 
 %changelog
+* Thu 1 Jun 2017 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-10
+- Update notes
+- Note SME bugs: 8890,8891,8897
+- Fix mistakes in createlinks file
+- Add event link
+
 * Wed Nov 18 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-9
 - Add UDP DB variable and modify masq temnplate
 
-* Mon Jun 29
-2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-8
+* Mon Jun 29 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-8
 - Remove Incorrect template file from /etc/ip-up.local
 
 * Wed Apr 08 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-6
@@ -39,7 +44,6 @@ xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP 
 - Escape quotes in template
 - Remove comments from db
 
-%changelog
 * Thu Mar 5 2015 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-3
 - Amend firewall fragment
 
