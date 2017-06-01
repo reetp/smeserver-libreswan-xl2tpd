@@ -1,6 +1,6 @@
 %define name smeserver-libreswan-xl2tpd
 %define version 0.1
-%define release 9
+%define release 10
 Summary: Plugin to enable LT2P/IPSEC connections
 Name: %{name}
 Version: %{version}
