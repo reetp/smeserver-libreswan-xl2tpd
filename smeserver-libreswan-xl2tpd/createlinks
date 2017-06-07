@@ -50,7 +50,7 @@ foreach (qw(
     ))
 {
     templates2events("$eventXl2tpd", qw(
-    ip-up.xl2tpd
+    /etc/pppp/ip-up.local
     ));
 }
 
