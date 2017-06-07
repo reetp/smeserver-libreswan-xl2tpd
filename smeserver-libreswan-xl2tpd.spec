@@ -1,6 +1,6 @@
 %define name smeserver-libreswan-xl2tpd
 %define version 0.1
-%define release 10
+%define release 11
 Summary: Plugin to enable LT2P/IPSEC connections
 Name: %{name}
 Version: %{version}
@@ -22,6 +22,9 @@ AutoReqProv: no
 xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP allows you to tunnel PPP over UDP
 
 %changelog
+* Wed Jun 07 2017 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-11
+- Fix various templates
+
 * Thu Jun 1 2017 John Crisp <jcrisp@safeandsoundit.co.uk> 0.1-10
 - Update notes
 - Note SME bugs: 8890,8891,8897

@@ -5,6 +5,17 @@ Substitute x with your local lan address.
 
 Make sure the IPs are NOT in your server DHCP range
 
+Note that the dhcpd.conf template checks the IPs and uses pptpd sessions -1 when it calculates the range. We could potentially use that
+
+e.g.
+
+[root@test plugins]# config show dhcpd
+dhcpd=service
+    Bootp=deny
+    end=192.168.97.250
+    start=192.168.97.65
+    status=disabled
+
 
 Make sure you have a local user for pam auth
 
