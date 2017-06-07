@@ -5,15 +5,14 @@
     use esmith::ConfigDB;
 
     my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
-	  my $ipsecprop = "L2TPD-PSK";
+	
+    my $ipsecprop = "L2TPD-PSK";
     
-  	my $ipsectype = $ipsecDB->get_prop( "$ipsecprop", 'type' );
+	# first we verify if L2TPD is enabled for the connection
 
-		# first we verify if L2TPD is enabled for the connection
+	my $ipsecstatus = $ipsecDB->get_prop( "$ipsecprop", 'status' ) || "disabled";
 
-		my $ipsecstatus = $ipsecDB->get_prop( "$ipsecprop", 'status' ) || "disabled";
-
-		return "# $ipsecprop is disabled\n" unless $ipsecstatus eq "enabled";
+	return "# $ipsecprop is missing or disabled\n" unless $ipsecstatus eq "enabled";
     
     
     $OUT .="conn $ipsecprop\n";
@@ -25,6 +24,7 @@
     $OUT .= "    type=transport\n";
     $OUT .= "    forceencaps=yes\n";
     $OUT .= "    right=%any\n";
+    $OUT .= "    rightsubnet=vhost:%any,%priv";
     $OUT .= "    rightprotoport=17/%any\n";
     $OUT .= "    # Using the magic port of \"0\" means \"any one single port\". This is\n";
     $OUT .= "    # a work around required for Apple OSX clients that use a randomly\n";
