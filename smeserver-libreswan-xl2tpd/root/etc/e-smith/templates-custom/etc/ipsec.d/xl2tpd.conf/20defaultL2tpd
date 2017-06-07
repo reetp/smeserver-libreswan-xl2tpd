@@ -1,0 +1,46 @@
+
+{
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
+
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
+	  my $ipsecprop = "L2TPD-PSK";
+    
+  	my $ipsectype = $ipsecDB->get_prop( "$ipsecprop", 'type' );
+
+		# first we verify if L2TPD is enabled for the connection
+
+		my $ipsecstatus = $ipsecDB->get_prop( "$ipsecprop", 'status' ) || "disabled";
+
+		return "# $ipsecprop is disabled\n" unless $ipsecstatus eq "enabled";
+    
+    
+    $OUT .="conn $ipsecprop\n";
+    $OUT .= "    authby=secret\n";
+    $OUT .= "    pfs=no\n";
+    $OUT .= "    auto=add\n";
+    $OUT .= "    keyingtries=3\n";
+    $OUT .= "    rekey=no\n";
+    $OUT .= "    type=transport\n";
+    $OUT .= "    forceencaps=yes\n";
+    $OUT .= "    right=%any\n";
+    $OUT .= "    rightprotoport=17/%any\n";
+    $OUT .= "    # Using the magic port of \"0\" means \"any one single port\". This is\n";
+    $OUT .= "    # a work around required for Apple OSX clients that use a randomly\n";
+    $OUT .= "    # high port, but propose \"0\" instead of their port.\n";
+    $OUT .= "    left=%defaultroute\n";
+    $OUT .= "    leftprotoport=17/1701\n";
+
+    $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
+    $OUT .= "    # to detect vanishing clients\n";
+
+    my $dpddelay = $ipsecDB->get_prop("$ipsecprop",'dpddelay')||"10\n";
+    $OUT .= "    dpddelay=$dpddelay\n";
+
+    my $dpdtimeout = $ipsecDB->get_prop("$ipsecprop",'dpdtimeout')||"90\n";
+    $OUT .= "    dpdtimeout=$dpdtimeout\n";
+
+    my $dpdaction=$ipsecDB->get_prop("$ipsecprop",'dpdaction')||"clear\n";
+    $OUT .= "    dpdaction=$dpdaction\n";
+}

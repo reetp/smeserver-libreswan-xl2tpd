@@ -1,0 +1,16 @@
+#x2ltpd
+login
+# If required
+debug
+ipparam xl2tpd
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+auth
+mtu 1400
+mru 1400
+hide-password
+name l2tpd
+proxyarp
+lcp-echo-interval 30
+lcp-echo-failure 4
+

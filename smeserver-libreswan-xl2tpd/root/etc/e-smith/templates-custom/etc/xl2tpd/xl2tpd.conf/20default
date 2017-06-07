@@ -1,0 +1,28 @@
+
+{
+	use strict;
+	use warnings;
+	use esmith::ConfigDB;
+
+    my $configDB = esmith::ConfigDB->open_ro or die ("can't open Config DB");
+
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
+
+    my $InternalIP = $configDB->get_prop("InternalInterface", 'IPAddress');
+
+    my $ipRangeStart = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeStart');
+    my $ipRangeFinish = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeFinish');
+
+    $OUT .= "[lns default]\n";
+    $OUT .= "name=L2TP-VPN\n";
+
+    $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
+
+    $OUT .= "local ip = $InternalIP\n";
+    $OUT .= "unix authentication = yes\n";
+    $OUT .= "require authentication = yes\n";
+    $OUT .= "ppp debug = yes\n";
+    $OUT .= "pppoptfile = /etc/ppp/options.xl2tpd\n";
+    $OUT .= "length bit = yes\n";
+
+}

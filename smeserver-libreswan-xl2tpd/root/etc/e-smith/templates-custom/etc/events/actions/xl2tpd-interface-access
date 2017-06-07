@@ -1,0 +1,63 @@
+#!/usr/bin/perl -w
+
+#----------------------------------------------------------------------
+# copyright (C) 2002 Mitel Networks Corporaton.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+#
+# Technical support for this program is available from e-smith, inc.
+# For details, please visit our web site at www.e-smith.com or
+# call us on 1 888 ESMITH 1 (US/Canada toll free) or +1 613 564 8000
+#----------------------------------------------------------------------
+
+package esmith;
+
+use strict;
+use Errno;
+use esmith::util;
+use esmith::ConfigDB;
+
+use constant SIGEVENT => '/sbin/e-smith/signal-event';
+
+my $db = esmith::ConfigDB->open;
+my $pptpd = $db->get('pptpd');
+my %ifaces = map { $_ => 1 } split /,/, $pptpd->prop('Interfaces') || '';
+
+my $event = $ARGV[0] || die "Event name must be given\n";
+my $ipparam = $ARGV[6] || "(none)";
+exit 0 unless ($ipparam eq "pptpd");
+my $interface = $ARGV[1] || die "Couldn't determine interface name\n";
+
+if ($event eq "ip-down")
+{
+    # Remove this interface.
+    if (exists $ifaces{$interface})
+    {
+	delete $ifaces{$interface};
+    }
+}
+elsif ($event eq "ip-up.pptpd")
+{
+    # Add this interface.
+    $ifaces{$interface} = 1;
+}
+else
+{
+    die "Don't know what to do for event $event\n";
+}
+
+$pptpd->set_prop('Interfaces', join ',', keys %ifaces);
+
+exit(0);
