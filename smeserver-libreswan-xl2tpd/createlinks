@@ -27,7 +27,7 @@ foreach (qw(
        /etc/xl2tpd/xl2tpd.conf
     ))
 {
-    templates2events("$eventIpsec", qw(
+    templates2events("$_", qw(
     post-upgrade
     console-save
     bootstrap-console-save
@@ -49,8 +49,8 @@ foreach (qw(
        /etc/rc.d/init.d/masq     
     ))
 {
-    templates2events("$eventXl2tpd", qw(
-    /etc/pppp/ip-up.local
+    templates2events("$_", qw(
+    /etc/ppp/ip-up.local
     ));
 }
 
