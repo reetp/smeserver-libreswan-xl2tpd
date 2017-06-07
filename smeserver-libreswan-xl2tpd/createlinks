@@ -11,11 +11,12 @@
 
 use esmith::Build::CreateLinks qw(:all);
 
+
 #--------------------------------------------------
-# actions for ipsec-update event
+# templates for events
 #--------------------------------------------------
 
-my $eventIpsec = "ipsec-update";
+
 
 foreach (qw(
        /etc/ipsec.d/xl2tpd.conf
@@ -36,23 +37,17 @@ foreach (qw(
     ));
 }
 
+#--------------------------------------------------
+# actions for ipsec-update event
+#--------------------------------------------------
+
+my $eventIpsec = "ipsec-update";
 
 #--------------------------------------------------
 # actions for ip-up.xl2tpd event
 #--------------------------------------------------
 
 my $eventXl2tpd = "ip-up.xl2tpd";
-
-# templates2expand 
-
-foreach (qw(
-       /etc/rc.d/init.d/masq     
-    ))
-{
-    templates2events("$_", qw(
-    /etc/ppp/ip-up.local
-    ));
-}
 
 # What was I thinking here ? Should be $eventIpsec or my $eventXl2tpd
 safe_symlink("adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq");
