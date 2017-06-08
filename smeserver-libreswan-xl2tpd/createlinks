@@ -6,6 +6,7 @@
 
 # On ipsec-update expand xl2tpd.conf & secrets
 
+# Need to stop xl2tpd if disabled. Key ?
 
 # On ip-up.xl2tpd expand and restart masq
 
@@ -19,8 +20,6 @@ use esmith::Build::CreateLinks qw(:all);
 
 
 foreach (qw(
-       /etc/ipsec.d/xl2tpd.conf
-       /etc/ipsec.d/xl2tpd.secrets
        /etc/pam.d/ppp
        /etc/ppp/ip-up.local
        /etc/ppp/options.xl2tpd
@@ -42,6 +41,8 @@ foreach (qw(
 #--------------------------------------------------
 
 my $eventIpsec = "ipsec-update";
+
+safe_symlink("adjust", "root/etc/e-smith/events/$eventIpsec/services2adjust/xl2tpd");
 
 #--------------------------------------------------
 # actions for ip-up.xl2tpd event
