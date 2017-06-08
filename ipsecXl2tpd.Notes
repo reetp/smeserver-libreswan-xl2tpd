@@ -18,7 +18,8 @@ dhcpd=service
 
 
 Make sure you have a local user for pam auth
-We need to set the right subnet to the same as the server local subnet
+
+For now we need to set the right subnet to the same as the server local subnet. This is used in /etc/ipsec.conf for the virtualhosts, but ignored in /etc/ipsec.d/ipsec.conf for now
 
 db ipsec_connections set L2TPD-PSK status disabled IPRangeStart 192.168.x.180 IPRangeFinish 192.168.x.200  leftsubnet 192.168.x.0/24 rightsubnet 192.168.x.0/24 passwd somesecret dpdaction clear dpddelay 10 dpdtimeout 90
 
