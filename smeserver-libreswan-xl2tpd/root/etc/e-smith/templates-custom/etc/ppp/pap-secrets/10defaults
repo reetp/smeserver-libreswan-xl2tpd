@@ -1,3 +1,19 @@
-#x2ltpd - for use with PAM authentication
+{
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
 
-*       l2tpd           ""              *
+    my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die("cant connect to ipsec database");
+
+    my $ipsecprop = "L2TPD-PSK";
+
+    if ( $ipsecDB->get_prop( $ipsecprop, 'status' ) ne 'enabled' ) {
+        $OUT .= "# l2tpd connection is disabled\n";
+    }
+    else {
+        $OUT .= "# x2ltpd - for use with PAM authentication\n";
+        $OUT .= "\n";
+        $OUT .= "\*       l2tpd           \"\"              \*\n";
+    }
+}
