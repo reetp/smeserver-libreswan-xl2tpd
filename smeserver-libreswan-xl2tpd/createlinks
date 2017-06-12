@@ -42,7 +42,6 @@ foreach (qw(
 
 my $eventIpsec = "ipsec-update";
 
-safe_symlink("adjust", "root/etc/e-smith/events/$eventIpsec/services2adjust/xl2tpd");
 
 #--------------------------------------------------
 # actions for ip-up.xl2tpd event
