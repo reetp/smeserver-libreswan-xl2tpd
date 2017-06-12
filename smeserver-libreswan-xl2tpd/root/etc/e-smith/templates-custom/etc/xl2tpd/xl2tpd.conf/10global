@@ -1,4 +1,0 @@
-
-[global]
-ipsec saref = yes
-force userspace = yes

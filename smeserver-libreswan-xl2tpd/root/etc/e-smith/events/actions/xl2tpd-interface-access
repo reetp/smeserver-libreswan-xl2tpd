@@ -32,12 +32,12 @@ use esmith::ConfigDB;
 use constant SIGEVENT => '/sbin/e-smith/signal-event';
 
 my $db = esmith::ConfigDB->open;
-my $pptpd = $db->get('pptpd');
-my %ifaces = map { $_ => 1 } split /,/, $pptpd->prop('Interfaces') || '';
+my $xl2tpd = $db->get('xl2tpd');
+my %ifaces = map { $_ => 1 } split /,/, $xl2tpd->prop('Interfaces') || '';
 
 my $event = $ARGV[0] || die "Event name must be given\n";
 my $ipparam = $ARGV[6] || "(none)";
-exit 0 unless ($ipparam eq "pptpd");
+exit 0 unless ($ipparam eq "xl2tpd");
 my $interface = $ARGV[1] || die "Couldn't determine interface name\n";
 
 if ($event eq "ip-down")
@@ -48,7 +48,7 @@ if ($event eq "ip-down")
 	delete $ifaces{$interface};
     }
 }
-elsif ($event eq "ip-up.pptpd")
+elsif ($event eq "ip-up.xl2tpd")
 {
     # Add this interface.
     $ifaces{$interface} = 1;
@@ -58,6 +58,6 @@ else
     die "Don't know what to do for event $event\n";
 }
 
-$pptpd->set_prop('Interfaces', join ',', keys %ifaces);
+$xl2tpd->set_prop('Interfaces', join ',', keys %ifaces);
 
 exit(0);

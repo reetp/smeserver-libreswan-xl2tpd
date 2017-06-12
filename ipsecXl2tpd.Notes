@@ -5,7 +5,44 @@ Substitute x with your local lan address.
 
 Make sure the IPs are NOT in your server DHCP range
 
+Note that the dhcpd.conf template checks the IPs and uses pptpd sessions -1 when it calculates the range. We could potentially use that
+
+e.g.
+
+[root@test plugins]# config show dhcpd
+dhcpd=service
+    Bootp=deny
+    end=192.168.97.250
+    start=192.168.97.65
+    status=disabled
+
 
 Make sure you have a local user for pam auth
 
-db ipsec_connections set L2TPD-PSK status disabled IPRangeStart 192.168.x.180 IPRangeFinish 192.168.x.200  dpdaction clear dpddelay 10 dpdtimeout 90
+For now we need to set the right subnet to the same as the server local subnet. This is used in /etc/ipsec.conf for the virtualhosts, but ignored in /etc/ipsec.d/ipsec.conf for now
+
+db ipsec_connections setprop L2TPD-PSK status disabled IPRangeStart 192.168.x.180 IPRangeFinish 192.168.x.200  rightsubnet 192.168.x.0/24 passwd somesecret dpdaction clear dpddelay 10 dpdtimeout 90
+
+Enable the xl2tpd service
+
+config setprop xl2tpd status enabled
+
+Run ipsec-update
+
+Try and login.....
+
+(You can regenerate the templates with remote-access update as this will generate the templates, but not stop/start/restart ipsec)
+
+DNS server defaults to the server internal IP. You can add more servers like this:
+
+config setprop xl2tpd DNS 208.67.222.222,208.67.220.220
+
+Debug - defaults to disabled
+
+You can enable debug like this
+
+config setprop xl2tpd debug enabled
+
+
+
+# Need to stop xl2tpd if disabled. Key for xl2tpd ?

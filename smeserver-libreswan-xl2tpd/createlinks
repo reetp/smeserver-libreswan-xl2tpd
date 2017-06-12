@@ -6,23 +6,28 @@
 
 # On ipsec-update expand xl2tpd.conf & secrets
 
+# Need to stop xl2tpd if disabled. Key ?
 
 # On ip-up.xl2tpd expand and restart masq
 
 use esmith::Build::CreateLinks qw(:all);
 
+
 #--------------------------------------------------
-# actions for ipsec-update event
+# templates for events
 #--------------------------------------------------
 
-my $eventIpsec = "ipsec-update";
+
 
 foreach (qw(
-       /etc/ipsec.d/xl2tpd.conf
-       /etc/ipsec.d/xl2tpd.secrets
+       /etc/pam.d/ppp
+       /etc/ppp/ip-up.local
+       /etc/ppp/options.xl2tpd
+       /etc/ppp/pap-secrets
+       /etc/xl2tpd/xl2tpd.conf
     ))
 {
-    templates2events("$eventIpsec", qw(
+    templates2events("$_", qw(
     post-upgrade
     console-save
     bootstrap-console-save
@@ -31,6 +36,12 @@ foreach (qw(
     ));
 }
 
+#--------------------------------------------------
+# actions for ipsec-update event
+#--------------------------------------------------
+
+my $eventIpsec = "ipsec-update";
+
 
 #--------------------------------------------------
 # actions for ip-up.xl2tpd event
@@ -38,21 +49,10 @@ foreach (qw(
 
 my $eventXl2tpd = "ip-up.xl2tpd";
 
-# templates2expand 
-
-foreach (qw(
-       /etc/rc.d/init.d/masq     
-    ))
-{
-    templates2events("$eventXl2tpd", qw(
-    ip-up.xl2tpd
-    ));
-}
-
 # What was I thinking here ? Should be $eventIpsec or my $eventXl2tpd
 safe_symlink("adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq");
 
-event_link("xl2tpd-interface-access", $event, "70");
+event_link("xl2tpd-interface-access", $eventXl2tpd, "70");
 
 # Runlevel init links.
 service_link_enhanced("xl2tpd", "S95", "7");
