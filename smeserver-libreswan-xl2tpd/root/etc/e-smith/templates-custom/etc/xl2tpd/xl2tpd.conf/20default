@@ -1,28 +1,47 @@
-
 {
-	use strict;
-	use warnings;
-	use esmith::ConfigDB;
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
 
-    my $configDB = esmith::ConfigDB->open_ro or die ("can't open Config DB");
+    my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die("cant connect to ipsec database");
+    my $ipsecDBkey  = "ipsec";
+    my $xl2tpdDBkey = "xl2tpd";
+    my $ipsecprop   = "L2TPD-PSK";
 
-    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die ("cant connect to ipsec database");
+    if ( $configDB->get_prop( $ipsecDBkey, 'status' ) ne 'enabled' ) {
+        $OUT .= "# ipsec is disabled\n";
+    }
 
-    my $InternalIP = $configDB->get_prop("InternalInterface", 'IPAddress');
+    elsif ( $configDB->get_prop( $xl2tpdDBkey, 'status' ) ne 'enabled' ) {
+        $OUT .= "# xl2tpd is disabled\n";
+    }
 
-    my $ipRangeStart = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeStart');
-    my $ipRangeFinish = $ipsecDB->get_prop("L2TPD-PSK", 'IPRangeFinish');
+    elsif ( $ipsecDB->get_prop( $ipsecprop, 'status' ) ne 'enabled' ) {
+        $OUT .= "# No LTPD Ipsec connection found\n";
+    }
 
-    $OUT .= "[lns default]\n";
-    $OUT .= "name=L2TP-VPN\n";
+    else {
+        my $InternalIP = $configDB->get_prop( "InternalInterface", 'IPAddress' );
+        my $ipRangeStart  = $ipsecDB->get_prop( $ipsecprop, 'IPRangeStart' );
+        my $ipRangeFinish = $ipsecDB->get_prop( $ipsecprop, 'IPRangeFinish' );
+        my $debug = $configDB->get_prop( $xl2tpdDBkey, 'debug' ) || 'disabled';
 
-    $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
+        $OUT .= "[global]\n";
+        $OUT .= "ipsec saref = yes\n";
+        $OUT .= "force userspace = yes\n";
+        $OUT .= "\n";
+        $OUT .= "[lns default]\n";
+        $OUT .= "name=L2TP-VPN\n";
+        $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
+        $OUT .= "local ip = $InternalIP\n";
+        $OUT .= "unix authentication = yes\n";
+        $OUT .= "require authentication = yes\n";
+        if ( $debug eq 'enabled' ) {
+            $OUT .= "ppp debug = yes\n";
+        }
+        $OUT .= "pppoptfile = /etc/ppp/options.xl2tpd\n";
+        $OUT .= "length bit = yes\n";
 
-    $OUT .= "local ip = $InternalIP\n";
-    $OUT .= "unix authentication = yes\n";
-    $OUT .= "require authentication = yes\n";
-    $OUT .= "ppp debug = yes\n";
-    $OUT .= "pppoptfile = /etc/ppp/options.xl2tpd\n";
-    $OUT .= "length bit = yes\n";
-
+    }
 }
