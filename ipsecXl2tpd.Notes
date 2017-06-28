@@ -27,6 +27,10 @@ Enable the xl2tpd service
 
 config setprop xl2tpd status enabled
 
+And ipsec
+
+config setprop ipsec status enabled
+
 Run ipsec-update
 
 Try and login.....

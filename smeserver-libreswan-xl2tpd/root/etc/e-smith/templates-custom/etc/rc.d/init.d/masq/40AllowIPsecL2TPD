@@ -1,14 +1,15 @@
+{
+    my $xl2tpd_status = $xl2tpd{status} || '';
+    if ( $xl2tpd_status eq 'enabled' ) {
 
-#Ports for Openswan / xl2tpd
-# Allow 1701 via ipsec - need to check this with the UDP port allowed in the DB variable
-/sbin/iptables -A INPUT -m policy --dir in --pol ipsec -p udp --dport 1701 -j ACCEPT
+        $OUT .= "  # Ports for Libreswan / xl2tpd\n";
+        $OUT .= "  # Allow 1701 via ipsec - need to check this with the UDP port allowed in the DB variable\n";
+        $OUT .= "  /sbin/iptables -A INPUT -m policy --dir in --pol ipsec -p udp --dport 1701 -j ACCEPT\n";
 
-# Disallow generic 1701
-/sbin/iptables -A INPUT -p udp --dport 1701 -j DROP
-
-
-
-
-
-
-
+        $OUT .= "  # Disallow generic 1701\n";
+        $OUT .= "  /sbin/iptables -A INPUT -p udp --dport 1701 -j DROP\n";
+    }
+    else {
+        $OUT .= "  # 40AllowIPsecL2TPD access disabled\n";
+    }
+}
