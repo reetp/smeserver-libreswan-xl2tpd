@@ -39,7 +39,7 @@
         $OUT .= "    type=transport\n";
         $OUT .= "    forceencaps=yes\n";
         $OUT .= "    right=%any\n";
-        $OUT .= "    rightsubnet=vhost:%any,%priv\n";
+        $OUT .= "    rightsubnet=vhost:%no,%priv\n";
         $OUT .= "    rightprotoport=17/%any\n";
         $OUT .= "    # Using the magic port of \"0\" means \"any one single port\". This is\n";
         $OUT .= "    # a work around required for Apple OSX clients that use a randomly\n";
