@@ -14,6 +14,7 @@
     else {
         $OUT .= "# x2ltpd - for use with PAM authentication\n";
         $OUT .= "\n";
-        $OUT .= "\*       l2tpd           \"\"              \*\n";
+# Not required for radius authent
+# $OUT .= "\*       l2tpd           \"\"              \*\n";
     }
 }

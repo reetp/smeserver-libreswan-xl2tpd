@@ -28,10 +28,19 @@
 
     else {
         $OUT .= "#x2ltpd\n";
-        $OUT .= "auth    required        pam_nologin.so\n";
-        $OUT .= "auth    required        pam_unix.so\n";
-        $OUT .= "account required        pam_unix.so\n";
-        $OUT .= "session required        pam_unix.so\n";
+# This was the original L2TPD code
+#        $OUT .= "auth    required        pam_nologin.so\n";
+#        $OUT .= "auth    required        pam_unix.so\n";
+#        $OUT .= "account required        pam_unix.so\n";
+#        $OUT .= "session required        pam_unix.so\n";
+
+# This is the original untemplated ppp code which works with L2TPD
+        $OUT .= "auth       include	password-auth\n";
+        $OUT .= "account    required	pam_nologin.so\n";
+        $OUT .= "account    include	password-auth\n";
+        $OUT .= "session    include	password-auth\n";
+
+
     }
 
 }

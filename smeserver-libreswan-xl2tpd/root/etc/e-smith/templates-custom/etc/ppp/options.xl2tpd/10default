@@ -52,5 +52,11 @@
         $OUT .= "proxyarp\n";
         $OUT .= "lcp-echo-interval 30\n";
         $OUT .= "lcp-echo-failure 4\n";
+        $OUT .= "plugin radius.so\n";
+        $OUT .= "radius-config-file /etc/radiusclient-ng/radiusclient.conf\n";
+        $OUT .= "refuse-pap\n";
+        $OUT .= "refuse-chap\n";
+        $OUT .= "refuse-mschap\n";
+        $OUT .= "require-mschap-v2 # Need MSCHAP-v2 to initialise encryption key\n";
     }
 }
