@@ -35,8 +35,8 @@
         $OUT .= "name=L2TP-VPN\n";
         $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
         $OUT .= "local ip = $InternalIP\n";
-# Following removed for local radious authentication
-#        $OUT .= "unix authentication = yes\n";
+        # Following removed for local radious authentication
+        # $OUT .= "unix authentication = yes\n";
         $OUT .= "require authentication = yes\n";
         if ( $debug eq 'enabled' ) {
             $OUT .= "ppp debug = yes\n";
