@@ -50,3 +50,35 @@ config setprop xl2tpd debug enabled
 
 
 # Need to stop xl2tpd if disabled. Key for xl2tpd ?
+
+
+--- Use SME authent ---
+
+
+xl2tpd.conf
+remove
+        $OUT .= "unix authentication = yes\n";
+
+
+options.xl2tpd
+
+Add these at the bottom
+
+        $OUT .= "plugin radius.so\n";
+        $OUT .= "radius-config-file /etc/radiusclient-ng/radiusclient.conf\n";
+        $OUT .= "refuse-pap\n";
+        $OUT .= "refuse-chap\n";
+        $OUT .= "refuse-mschap\n";
+        $OUT .= "require-mschap-v2 # Need MSCHAP-v2 to initialise encryption key\n";
+
+
+/etc/pam.d/ppp
+
+Set to SME default (this is not normally templated)
+
+[root@home pam.d]# cat /etc/pam.d/ppp
+#%PAM-1.0
+auth       include	password-auth
+account    required	pam_nologin.so
+account    include	password-auth
+session    include	password-auth
