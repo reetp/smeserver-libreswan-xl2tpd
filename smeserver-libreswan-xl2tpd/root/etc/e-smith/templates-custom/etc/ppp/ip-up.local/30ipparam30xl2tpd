@@ -1,0 +1,4 @@
+    xl2tpd)
+    echo xl2tpd "$@" |logger -t "ip-up"
+    /sbin/e-smith/signal-event ip-up.xl2tpd
+                ;;

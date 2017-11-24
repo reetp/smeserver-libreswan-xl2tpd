@@ -1,0 +1,46 @@
+{
+    use strict;
+    use warnings;
+    use esmith::ConfigDB;
+
+    my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
+    my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die("cant connect to ipsec database");
+    my $ipsecDBkey  = "ipsec";
+    my $xl2tpdDBkey = "xl2tpd";
+    my $ipsecprop   = "L2TPD-PSK";
+    my $systemMode  = $configDB->get("SystemMode")->value;
+
+    if ( $systemMode ne 'servergateway' ) {
+        $OUT .= "# L2TPD - System not in Server Gateway mode\n";
+    }
+
+    elsif ( $configDB->get_prop( $ipsecDBkey, 'status' ) ne 'enabled' ) {
+        $OUT .= "# ipsec is disabled\n";
+    }
+
+    elsif ( $configDB->get_prop( $xl2tpdDBkey, 'status' ) ne 'enabled' ) {
+        $OUT .= "# xl2tpd is disabled\n";
+    }
+
+    elsif ( $ipsecDB->get_prop( $ipsecprop, 'status' ) ne 'enabled' ) {
+        $OUT .= "# l2tpd connection is disabled\n";
+    }
+
+    else {
+        $OUT .= "#x2ltpd\n";
+# This was the original L2TPD code
+#        $OUT .= "auth    required        pam_nologin.so\n";
+#        $OUT .= "auth    required        pam_unix.so\n";
+#        $OUT .= "account required        pam_unix.so\n";
+#        $OUT .= "session required        pam_unix.so\n";
+
+# This is the original untemplated ppp code which works with L2TPD
+        $OUT .= "auth       include	password-auth\n";
+        $OUT .= "account    required	pam_nologin.so\n";
+        $OUT .= "account    include	password-auth\n";
+        $OUT .= "session    include	password-auth\n";
+
+
+    }
+
+}

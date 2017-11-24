@@ -1,0 +1,84 @@
+There can only be one L2TPD connection
+
+IP Ranges
+Substitute x with your local lan address.
+
+Make sure the IPs are NOT in your server DHCP range
+
+Note that the dhcpd.conf template checks the IPs and uses pptpd sessions -1 when it calculates the range. We could potentially use that
+
+e.g.
+
+[root@test plugins]# config show dhcpd
+dhcpd=service
+    Bootp=deny
+    end=192.168.97.250
+    start=192.168.97.65
+    status=disabled
+
+
+Make sure you have a local user for pam auth
+
+For now we need to set the right subnet to the same as the server local subnet. This is used in /etc/ipsec.conf for the virtualhosts, but ignored in /etc/ipsec.d/ipsec.conf for now
+
+db ipsec_connections setprop L2TPD-PSK status disabled IPRangeStart 192.168.x.180 IPRangeFinish 192.168.x.200  rightsubnet 192.168.x.0/24 passwd somesecret dpdaction clear dpddelay 10 dpdtimeout 90
+
+Enable the xl2tpd service
+
+config setprop xl2tpd status enabled
+
+And ipsec
+
+config setprop ipsec status enabled
+
+Run ipsec-update
+
+Try and login.....
+
+(You can regenerate the templates with remote-access update as this will generate the templates, but not stop/start/restart ipsec)
+
+DNS server defaults to the server internal IP. You can add more servers like this:
+
+config setprop xl2tpd DNS 208.67.222.222,208.67.220.220
+
+Debug - defaults to disabled
+
+You can enable debug like this
+
+config setprop xl2tpd debug enabled
+
+
+
+# Need to stop xl2tpd if disabled. Key for xl2tpd ?
+
+
+--- Use SME authent ---
+
+
+xl2tpd.conf
+remove
+        $OUT .= "unix authentication = yes\n";
+
+
+options.xl2tpd
+
+Add these at the bottom
+
+        $OUT .= "plugin radius.so\n";
+        $OUT .= "radius-config-file /etc/radiusclient-ng/radiusclient.conf\n";
+        $OUT .= "refuse-pap\n";
+        $OUT .= "refuse-chap\n";
+        $OUT .= "refuse-mschap\n";
+        $OUT .= "require-mschap-v2 # Need MSCHAP-v2 to initialise encryption key\n";
+
+
+/etc/pam.d/ppp
+
+Set to SME default (this is not normally templated)
+
+[root@home pam.d]# cat /etc/pam.d/ppp
+#%PAM-1.0
+auth       include	password-auth
+account    required	pam_nologin.so
+account    include	password-auth
+session    include	password-auth
