@@ -3,9 +3,9 @@
     my $xl2tpd_dport = $xl2tpd{UDPPort} || '1701';
     if ( $xl2tpd_status eq 'enabled' ) {
         $OUT .= "  # Ports for Libreswan / xl2tpd\n";
-        $OUT .= "  # Allow 1701 via ipsec - should check this with the UDP port allowed in the DB variable\n";
+        $OUT .= "  # Allow 1701 or other port via ipsec\n";
         $OUT .= "  /sbin/iptables -A INPUT -m policy --dir in --pol ipsec -p udp --dport $xl2tpd_dport -j ACCEPT\n";
-        $OUT .= "  # Disallow generic 1701\n";
+        $OUT .= "  # Disallow generic 1701 or other port\n";
         $OUT .= "  /sbin/iptables -A INPUT -p udp --dport $xl2tpd_dport -j DROP\n";
     }
     else {
