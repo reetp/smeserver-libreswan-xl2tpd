@@ -9,6 +9,8 @@ License: GNU GPL version 2
 URL: http://libreswan.org/
 Group: SMEserver/addon
 Source: %{name}-%{version}.tar.gz
+Patch1: smeserver-libreswan-xl2tpd-private-access.patch
+
 BuildRoot: /var/tmp/%{name}-%{version}
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools
@@ -89,6 +91,7 @@ xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP 
 
 %prep
 %setup
+%patch1 -p1
 
 %build
 perl createlinks
