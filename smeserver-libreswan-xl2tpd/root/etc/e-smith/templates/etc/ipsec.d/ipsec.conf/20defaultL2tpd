@@ -57,25 +57,24 @@
         my $dpdaction = $ipsecDB->get_prop( $ipsecprop, 'dpdaction' ) || "clear\n";
         $OUT .= "    dpdaction=$dpdaction\n";
 
-       # Some additional config entries if required
-       # For nat connections you can use "vhost:%no,%priv"
-       # Disabled for now - needs some thought
+        # Some additional config entries if required
+        # For nat connections you can use "vhost:%no,%priv"
+        # Disabled for now - needs some thought
 
-       my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
-       if ($rightsubnet ne '') {
-       $OUT .= "    rightsubnet=$rightsubnet\n";
-       }
+        my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
+        if ( $rightsubnet ne '' ) {
+            $OUT .= "    rightsubnet=$rightsubnet\n";
+        }
 
-       my $leftsourceip = $ipsecDB->get_prop( $ipsecprop, 'leftsourceip' ) || '';
-       if ($leftsourceip ne '') {
-       $OUT .= "    leftsourceip=$leftsourceip\n";
-       }
+        my $leftsourceip = $ipsecDB->get_prop( $ipsecprop, 'leftsourceip' ) || '';
+        if ( $leftsourceip ne '' ) {
+            $OUT .= "    leftsourceip=$leftsourceip\n";
+        }
 
-       my $leftsubnet = $ipsecDB->get_prop( $ipsecprop, 'leftsubnet' ) || '';
-       if ($leftsubnet ne '') {
-       $OUT .= "    leftsubnet=$leftsubnet\n";
-       }
+        my $leftsubnet = $ipsecDB->get_prop( $ipsecprop, 'leftsubnet' ) || '';
+        if ( $leftsubnet ne '' ) {
+            $OUT .= "    leftsubnet=$leftsubnet\n";
+        }
 
-        
     }
 }
