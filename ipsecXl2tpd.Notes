@@ -12,7 +12,7 @@ e.g.
 [root@test plugins]# config show dhcpd
 dhcpd=service
     Bootp=deny
-    end=192.168.97.250
+    end=192.168.97.100
     start=192.168.97.65
     status=disabled
 
@@ -21,7 +21,7 @@ Make sure you have a local user for pam auth
 
 For now we need to set the right subnet to the same as the server local subnet. This is used in /etc/ipsec.conf for the virtualhosts, but ignored in /etc/ipsec.d/ipsec.conf for now
 
-db ipsec_connections setprop L2TPD-PSK status disabled IPRangeStart 192.168.x.180 IPRangeFinish 192.168.x.200  rightsubnet 192.168.x.0/24 passwd somesecret dpdaction clear dpddelay 10 dpdtimeout 90
+db ipsec_connections setprop L2TPD-PSK status disabled IPRangeStart 192.168.97.180 IPRangeFinish 192.168.97.200  passwd somesecret leftsourceip 192.168.97.1 leftsubnet 192.168.97.0/24
 
 Enable the xl2tpd service
 
@@ -82,3 +82,4 @@ auth       include	password-auth
 account    required	pam_nologin.so
 account    include	password-auth
 session    include	password-auth
+
