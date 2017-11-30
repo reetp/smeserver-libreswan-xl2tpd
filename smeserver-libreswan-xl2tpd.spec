@@ -10,6 +10,7 @@ URL: http://libreswan.org/
 Group: SMEserver/addon
 Source: %{name}-%{version}.tar.gz
 Patch1: smeserver-libreswan-xl2tpd-private-access.patch
+Patch2: smeserver-libreswan-xl2tpd-update-variables.patch
 
 BuildRoot: /var/tmp/%{name}-%{version}
 BuildArchitectures: noarch
@@ -24,6 +25,10 @@ AutoReqProv: no
 xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP allows you to tunnel PPP over UDP
 
 %changelog
+* Wed Nov 29 2017 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-2
+- remove unneeded default right subnet setting to clear error
+- added variables for leftsourceip and leftsubnet if required
+
 * Wed Nov 29 2017 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-2
 - add xl2tpd access private as default
 
@@ -92,6 +97,7 @@ xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP 
 %prep
 %setup
 %patch1 -p1
+%patch2 -p1
 
 %build
 perl createlinks
