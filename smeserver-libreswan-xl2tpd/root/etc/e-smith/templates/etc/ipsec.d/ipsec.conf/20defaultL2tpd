@@ -37,7 +37,7 @@
         $OUT .= "    keyingtries=3\n";
         $OUT .= "    rekey=no\n";
         $OUT .= "    type=transport\n";
-        $OUT .= "    forceencaps=yes\n";
+        $OUT .= "    encapsulation=yes\n";
         $OUT .= "    right=%any\n";
         $OUT .= "    rightprotoport=17/%any\n";
         $OUT .= "    # Using the magic port of \"0\" means \"any one single port\". This is\n";
@@ -60,6 +60,8 @@
         # Some additional config entries if required
         # For nat connections you can use "vhost:%no,%priv"
         # Disabled for now - needs some thought
+        # Probably only needed if you are doing subnet <-> subnet
+        # Most likely not required for dialin
 
         my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
         if ( $rightsubnet ne '' ) {
