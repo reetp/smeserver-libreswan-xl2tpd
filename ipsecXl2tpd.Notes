@@ -49,9 +49,9 @@ config setprop xl2tpd debug enabled
 
 # Need to stop xl2tpd if disabled. Key for xl2tpd ?
 
+SME Authent is in the latest 0.5.x
 
 --- Use SME authent ---
-
 
 xl2tpd.conf
 remove
