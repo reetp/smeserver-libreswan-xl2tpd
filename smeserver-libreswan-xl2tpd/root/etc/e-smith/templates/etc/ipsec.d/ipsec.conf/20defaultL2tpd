@@ -47,6 +47,7 @@
         $OUT .= "    leftprotoport=17/1701\n";
         $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
         $OUT .= "    # to detect vanishing clients\n";
+        $OUT .= "    ikev2=permit\n";
 
         my $dpddelay = $ipsecDB->get_prop( $ipsecprop, 'dpddelay' ) || "10\n";
         $OUT .= "    dpddelay=$dpddelay\n";
