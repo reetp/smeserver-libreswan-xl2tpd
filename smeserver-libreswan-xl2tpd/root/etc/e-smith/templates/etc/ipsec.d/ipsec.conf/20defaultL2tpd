@@ -45,9 +45,11 @@
         $OUT .= "    # high port, but propose \"0\" instead of their port.\n";
         $OUT .= "    left=%defaultroute\n";
         $OUT .= "    leftprotoport=17/1701\n";
+        $OUT .= "    # Permit Ike v1 for older xl2tpd connections/clients\n";
+        $OUT .= "    ikev2=permit\n";
+
         $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
         $OUT .= "    # to detect vanishing clients\n";
-        $OUT .= "    ikev2=permit\n";
 
         my $dpddelay = $ipsecDB->get_prop( $ipsecprop, 'dpddelay' ) || "10\n";
         $OUT .= "    dpddelay=$dpddelay\n";
@@ -63,6 +65,7 @@
         # Disabled for now - needs some thought
         # Probably only needed if you are doing subnet <-> subnet
         # Most likely not required for dialin
+        # see https://libreswan.org/man/ipsec.conf.5.html -> leftsubnet
 
         my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
         if ( $rightsubnet ne '' ) {
