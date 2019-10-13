@@ -30,7 +30,7 @@ xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP 
 * Tue Sep 03 2019 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-6
 - Add ipsec connection status key (disabled as default)
 - Update Libreswan depends
-- Add ikev2 permit to allo ike v1
+- Add ikev2 permit to allow ike v1
 
 * Thu Jun 21 2018 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-5
 - Fix obsolete forecencaps
