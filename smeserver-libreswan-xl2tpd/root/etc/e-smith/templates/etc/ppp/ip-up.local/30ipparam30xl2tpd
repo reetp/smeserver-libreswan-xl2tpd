@@ -1,4 +1,11 @@
-    xl2tpd)
-    echo xl2tpd "$@" |logger -t "ip-up"
-    /sbin/e-smith/signal-event ip-up.xl2tpd
-                ;;
+{
+    my $status = ${'xl2tpd'}{'debug'} || 'disabled';
+
+        $OUT .= "    xl2tpd)\n";
+
+        if ( $status eq 'enabled' ) {
+            $OUT .= "        echo xl2tpd \"$@\" |logger -t \"xl2tpd-ip-up\" \n";
+        }
+        $OUT .= "       /sbin/e-smith/signal-event ip-up.xl2tpd \"\$@\" \n";
+        $OUT .= "                        ;;";
+}
