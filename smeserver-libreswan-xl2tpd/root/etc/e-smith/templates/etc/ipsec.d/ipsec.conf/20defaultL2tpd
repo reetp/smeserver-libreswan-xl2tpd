@@ -28,9 +28,18 @@
 
     else {
 
-        # Currently these are hard coded but could come from the DB key
+        # Currently most of these are hard coded but could come from the DB key
+        
+        # For nat connections you can use "vhost:%no,%priv"
+        # See above
+        # https://github.com/libreswan/libreswan/blob/master/docs/examples/l2tp-psk.conf
+        # see https://libreswan.org/man/ipsec.conf.5.html -> leftsubnet
+        
+        $OUT .= "conn $ipsecprop-NAT";
+        $OUT .= "    rightsubnet=vhost:%priv";
+	    $OUT .= "    also=$ipsecprop-noNAT";
 
-        $OUT .= "conn $ipsecprop\n";
+        $OUT .= "conn $ipsecprop-noNAT\n";
         $OUT .= "    authby=secret\n";
         $OUT .= "    pfs=no\n";
         $OUT .= "    auto=add\n";
@@ -61,12 +70,8 @@
         $OUT .= "    dpdaction=$dpdaction\n";
 
         # Some additional config entries if required
-        # For nat connections you can use "vhost:%no,%priv"
-        # Disabled for now - needs some thought
-        # Probably only needed if you are doing subnet <-> subnet
-        # Most likely not required for dialin
-        # see https://libreswan.org/man/ipsec.conf.5.html -> leftsubnet
-
+        # right subnet would not normally be used as it is used above
+        
         my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
         if ( $rightsubnet ne '' ) {
             $OUT .= "    rightsubnet=$rightsubnet\n";
