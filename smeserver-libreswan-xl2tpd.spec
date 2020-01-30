@@ -1,18 +1,19 @@
 %define name smeserver-libreswan-xl2tpd
 %define version 0.5
-%define release 6
+%define release 7
 Summary: Plugin to enable LT2P/IPSEC connections
 Name: %{name}
 Version: %{version}
 Release: %{release}
 License: GNU GPL version 2
-URL: http://libreswan.org/
+URL: https://www.libreswan.org/
 Group: SMEserver/addon
 Source: %{name}-%{version}.tar.gz
 Patch1: smeserver-libreswan-xl2tpd-private-access.patch
 Patch2: smeserver-libreswan-xl2tpd-update-variables.patch
 Patch3: smeserver-libreswan-xl2tpd-cleanup-obsoletes.patch
 Patch4: smeserver-libreswan-xl2tpd-update-status-default
+Patch5: smeserver-libreswan-xl2tpd-update-ip-up-local.patch
 
 BuildRoot: /var/tmp/%{name}-%{version}
 BuildArchitectures: noarch
@@ -27,6 +28,11 @@ AutoReqProv: no
 xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP allows you to tunnel PPP over UDP
 
 %changelog
+* Thu Jan 30 2020 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-7
+- Update ip-up.local to add debug and enhance setting
+- update ipsec.conf to for NAT/noNAT
+- add $mtu key -defaults to 1400
+
 * Tue Sep 03 2019 John Crisp <jcrisp@safeandsoundit.co.uk> 0.5-6
 - Add ipsec connection status key (disabled as default)
 - Update Libreswan depends
@@ -114,7 +120,7 @@ xl2tpd is an implementation of the Layer 2 Tunnelling Protocol (RFC 2661). L2TP 
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-
+%patch5 -p1
 
 %build
 perl createlinks
