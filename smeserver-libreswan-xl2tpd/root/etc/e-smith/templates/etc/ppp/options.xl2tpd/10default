@@ -25,6 +25,7 @@
         my $InternalIP = $configDB->get_prop( "InternalInterface", 'IPAddress' );
         my $DNS        = $configDB->get_prop( "xl2tpd",            'DNS' ) || '';
         my $debug      = $configDB->get_prop( "xl2tpd",            'debug' ) || 'disabled';
+        my $mtu        = $configDB->get_prop( "xl2tpd",            'mtu' ) || '1400';
 
         $OUT .= "#x2ltpd\n";
         $OUT .= "login\n";
@@ -45,8 +46,8 @@
 
         $OUT .= "ipparam xl2tpd\n";
         $OUT .= "auth\n";
-        $OUT .= "mtu 1400\n";
-        $OUT .= "mru 1400\n";
+        $OUT .= "mtu $mtu\n";
+        $OUT .= "mru $mtu\n";
         $OUT .= "hide-password\n";
         $OUT .= "name l2tpd\n";
         $OUT .= "proxyarp\n";
