@@ -5,7 +5,7 @@
 
     my $configDB = esmith::ConfigDB->open_ro or die("can't open Config DB");
     my $ipsecDB = esmith::ConfigDB->open_ro('ipsec_connections') or die("cant connect to ipsec database");
-    
+
     my $ipsecDBkey  = "ipsec";
     my $xl2tpdDBkey = "xl2tpd";
     my $ipsecprop   = "L2TPD-PSK";
@@ -26,38 +26,54 @@
         my $DNS        = $configDB->get_prop( "xl2tpd",            'DNS' ) || '';
         my $debug      = $configDB->get_prop( "xl2tpd",            'debug' ) || 'disabled';
         my $mtu        = $configDB->get_prop( "xl2tpd",            'mtu' ) || '1400';
-
+        my @DNSArray = split( /,/, $DNS );
+        
         $OUT .= "#x2ltpd\n";
         $OUT .= "login\n";
 
-        if ( $debug eq 'enabled' ) {
-            $OUT .= "debug\n";
-        }
+        # https://github.com/xelerance/xl2tpd/blob/master/examples/ppp-options.xl2tpd
 
+        $OUT .= "ipparam xl2tpd\n";
+        $OUT .= "ipcp-accept-local\n";
+        $OUT .= "ipcp-accept-remote\n";
         if ( $InternalIP ne '' ) {
             $OUT .= "ms-dns $InternalIP\n";
         }
-
-        my @DNSArray = split( /,/, $DNS );
-
-        foreach my $IP (@DNSArray) {
-            $OUT .= "ms-dns $IP\n";
+        unless ($DNS eq ''){
+            foreach my $IP (@DNSArray) {
+                $OUT .= "ms-dns $IP\n";
+            }
         }
-
-        $OUT .= "ipparam xl2tpd\n";
+        $OUT .= "noccp\n";        
         $OUT .= "auth\n";
+        $OUT .= "crtscts\n"; # depends on xl2tpd version
+        $OUT .= "idle 800\n";
         $OUT .= "mtu $mtu\n";
         $OUT .= "mru $mtu\n";
+        $OUT .= "nodefaultroute\n";
+        if ( $debug eq 'enabled' ) {
+            $OUT .= "debug\n";
+        }
+        $OUT .= "proxyarp\n";
+        $OUT .= "connect-delay 5000\n";
+        
+        # Beyond here are additional parameters required
+        
         $OUT .= "hide-password\n";
         $OUT .= "name l2tpd\n";
-        $OUT .= "proxyarp\n";
-        $OUT .= "lcp-echo-interval 30\n";
-        $OUT .= "lcp-echo-failure 4\n";
+
+        # Following the main examples we shoudln't need these
+        # $OUT .= "lcp-echo-interval 30\n";
+        # $OUT .= "lcp-echo-failure 4\n";
+        
+        # This section allows us to authenticate against SME users
         $OUT .= "plugin radius.so\n";
         $OUT .= "radius-config-file /etc/radiusclient-ng/radiusclient.conf\n";
         $OUT .= "refuse-pap\n";
         $OUT .= "refuse-chap\n";
         $OUT .= "refuse-mschap\n";
         $OUT .= "require-mschap-v2 # Need MSCHAP-v2 to initialise encryption key\n";
+
+
     }
 }
