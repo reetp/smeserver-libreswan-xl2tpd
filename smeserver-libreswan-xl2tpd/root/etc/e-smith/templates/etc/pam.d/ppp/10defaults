@@ -23,7 +23,7 @@
     }
 
     elsif ( $ipsecDB->get_prop( $ipsecprop, 'status' ) ne 'enabled' ) {
-        $OUT .= "# l2tpd connection is disabled\n";
+        $OUT .= "# ipsec l2tpd connection is disabled\n";
     }
 
     else {
@@ -39,8 +39,5 @@
         $OUT .= "account    required	pam_nologin.so\n";
         $OUT .= "account    include	password-auth\n";
         $OUT .= "session    include	password-auth\n";
-
-
     }
-
 }
