@@ -22,19 +22,34 @@
     }
 
     else {
-        my $InternalIP = $configDB->get_prop( "InternalInterface", 'IPAddress' );
+        my $listenAddr = $configDB->get_prop( 'ExternalInterface', 'IPAddress');
+        my $InternalIP = $configDB->get_prop( 'InternalInterface', 'IPAddress' );
         my $ipRangeStart  = $ipsecDB->get_prop( $ipsecprop, 'IPRangeStart' );
         my $ipRangeFinish = $ipsecDB->get_prop( $ipsecprop, 'IPRangeFinish' );
         my $debug = $configDB->get_prop( $xl2tpdDBkey, 'debug' ) || 'disabled';
+        my $maxRetries = $configDB->get_prop( $xl2tpdDBkey, 'maxRetries' ) || '5';
 
+        # https://libreswan.org/wiki/VPN_server_for_remote_clients_using_IKEv1_with_L2TP
+        # Now have kernel support with modprobe pppol2tpd
+        # So userspace and saref disabled/left at default
         $OUT .= "[global]\n";
-        $OUT .= "ipsec saref = yes\n";
-        $OUT .= "force userspace = yes\n";
+        $OUT .= ";ipsec saref = yes\n";
+        $OUT .= ";force userspace = yes\n";
+        $OUT .= "listen-addr = $listenAddr\n";
+        $OUT .= "max retries = $maxRetries\n";
+
+        if ( $debug eq 'enabled' ) {
+            $OUT .= "debug avp = yes\n";
+            $OUT .= "debug network = yes\n";
+            $OUT .= "debug state = yes\n";
+            $OUT .= "debug tunnel = yes\n";
+        }
         $OUT .= "\n";
         $OUT .= "[lns default]\n";
         $OUT .= "name=L2TP-VPN\n";
         $OUT .= "ip range = $ipRangeStart-$ipRangeFinish\n";
         $OUT .= "local ip = $InternalIP\n";
+
         # Following removed for local radious authentication
         # $OUT .= "unix authentication = yes\n";
         $OUT .= "require authentication = yes\n";
