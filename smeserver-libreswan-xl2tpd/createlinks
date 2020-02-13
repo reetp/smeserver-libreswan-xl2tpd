@@ -2,38 +2,37 @@
 
 # Need some thought on when the templates should be expanded and when the action should be called.
 
-# Need to 
+# Need to
 
 # On ipsec-update expand xl2tpd.conf & secrets
 
 # Need to stop xl2tpd if disabled. Key ?
 
-# On ip-up.xl2tpd expand and restart masq
-
 use esmith::Build::CreateLinks qw(:all);
-
 
 #--------------------------------------------------
 # templates for events
 #--------------------------------------------------
 
-
-
-foreach (qw(
-       /etc/pam.d/ppp
-       /etc/ppp/ip-up.local
-       /etc/ppp/options.xl2tpd
-       /etc/ppp/pap-secrets
-       /etc/xl2tpd/xl2tpd.conf
-    ))
-{
-    templates2events("$_", qw(
-    post-upgrade
-    console-save
-    bootstrap-console-save
-    remoteaccess-update
-    ipsec-update
-    ));
+foreach (
+    qw(
+    /etc/pam.d/ppp
+    /etc/ppp/ip-up.local
+    /etc/ppp/options.xl2tpd
+    /etc/ppp/pap-secrets
+    /etc/xl2tpd/xl2tpd.conf
+    /etc/sysconfig/modules/ip_xl2tpd.modules
+    )
+    ) {
+    templates2events(
+        "$_", qw(
+            post-upgrade
+            console-save
+            bootstrap-console-save
+            remoteaccess-update
+            ipsec-update
+            )
+    );
 }
 
 #--------------------------------------------------
@@ -42,21 +41,41 @@ foreach (qw(
 
 my $eventIpsec = "ipsec-update";
 
-
 #--------------------------------------------------
 # actions for ip-up.xl2tpd event
 #--------------------------------------------------
 
 my $eventXl2tpd = "ip-up.xl2tpd";
-
-# What was I thinking here ? Should be $eventIpsec or my $eventXl2tpd
-safe_symlink("adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq");
-
-event_link("xl2tpd-interface-access", $eventXl2tpd, "70");
+safe_symlink( "adjust", "root/etc/e-smith/events/$eventXl2tpd/services2adjust/masq" );
+event_link( "xl2tpd-interface-access", $eventXl2tpd, "70" );
 
 # Runlevel init links.
-service_link_enhanced("xl2tpd", "S95", "7");
-service_link_enhanced("xl2tpd", "K21", "6");
-service_link_enhanced("xl2tpd", "K21", "0");
-service_link_enhanced("xl2tpd", "K21", "1");
+service_link_enhanced( "xl2tpd", "S95", "7" );
+service_link_enhanced( "xl2tpd", "K21", "6" );
+service_link_enhanced( "xl2tpd", "K21", "0" );
+service_link_enhanced( "xl2tpd", "K21", "1" );
 
+# On ip-up.xl2tpd expand and restart masq
+
+foreach (
+    qw(
+    /etc/rc.d/init.d/masq
+    )
+    ) {
+    templates2events(
+        "$_", qw(
+            ip-up.xl2tpd
+            )
+    );
+}
+
+
+#--------------------------------------------------
+# actions for ip-up.xl2tpd event
+# On ip-down clear the interface
+# masq gets restarted anyway via existing event
+#--------------------------------------------------
+
+my $eventXl2tpd = "ip-down";
+
+event_link( "xl2tpd-interface-access", $eventXl2tpd, "70" );
