@@ -29,17 +29,13 @@
     else {
 
         # Currently most of these are hard coded but could come from the DB key
-        
+
         # For nat connections you can use "vhost:%no,%priv"
         # See above
         # https://github.com/libreswan/libreswan/blob/master/docs/examples/l2tp-psk.conf
         # see https://libreswan.org/man/ipsec.conf.5.html -> leftsubnet
-        
-        $OUT .= "conn $ipsecprop-NAT";
-        $OUT .= "    rightsubnet=vhost:%priv";
-	    $OUT .= "    also=$ipsecprop-noNAT";
 
-        $OUT .= "conn $ipsecprop-noNAT\n";
+        $OUT .= "conn $ipsecprop\n";
         $OUT .= "    authby=secret\n";
         $OUT .= "    pfs=no\n";
         $OUT .= "    auto=add\n";
@@ -55,7 +51,7 @@
         $OUT .= "    left=%defaultroute\n";
         $OUT .= "    leftprotoport=17/1701\n";
         $OUT .= "    # Permit Ike v1 for older xl2tpd connections/clients\n";
-        $OUT .= "    ikev2=permit\n";
+        $OUT .= "    ikev2=never\n";
 
         $OUT .= "    # Apple iOS doesn't send delete notify so we need dead peer detection\n";
         $OUT .= "    # to detect vanishing clients\n";
@@ -71,11 +67,10 @@
 
         # Some additional config entries if required
         # right subnet would not normally be used as it is used above
-        
-        my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || '';
-        if ( $rightsubnet ne '' ) {
-            $OUT .= "    rightsubnet=$rightsubnet\n";
-        }
+
+        # Removing rightsubnet entirely. If required it is added in the -NAT section
+        # Unlike standard ipsec we use the rightsubnet key to fix
+        # the vhosts in /etc/ipsec.conf only
 
         my $leftsourceip = $ipsecDB->get_prop( $ipsecprop, 'leftsourceip' ) || '';
         if ( $leftsourceip ne '' ) {
@@ -86,6 +81,14 @@
         if ( $leftsubnet ne '' ) {
             $OUT .= "    leftsubnet=$leftsubnet\n";
         }
+
+        # For L2TPD we really want vhost:%priv unless someone has a really good reason not too
+        # We leave that option in
+        my $rightsubnet = $ipsecDB->get_prop( $ipsecprop, 'rightsubnet' ) || "vhost:%priv";
+
+        $OUT .= "conn $ipsecprop-NAT\n";
+        $OUT .= "    rightsubnet=$rightsubnet\n";
+        $OUT .= "    also=$ipsecprop\n";
 
     }
 }
