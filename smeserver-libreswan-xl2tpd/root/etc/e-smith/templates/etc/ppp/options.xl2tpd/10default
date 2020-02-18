@@ -46,7 +46,6 @@
         }
         $OUT .= "noccp\n";        
         $OUT .= "auth\n";
-        $OUT .= "crtscts\n"; # depends on xl2tpd version
         $OUT .= "idle 800\n";
         $OUT .= "mtu $mtu\n";
         $OUT .= "mru $mtu\n";
